@@ -1,0 +1,8 @@
+!Assets/*
+!ProjectSettings/*
+Assembly-CSharp.csproj
+IsolateLevel.sln
+IsolateLevel.userprefs
+Library/*
+Temp/*
+.DS_Store
