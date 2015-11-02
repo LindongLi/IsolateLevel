@@ -9,20 +9,24 @@ public class lld_MainController : MonoBehaviour
 	public float tiltRatio = 0.04f;
 	public float cameraMaxLen = 20f;
 	/**************************/
-	const float maxzoom = 0.9f;
 	private float zoomval = 0.3f;
-	private float gravityTheta = 0f;
+	private float gravityAlpha = 0f;
 	private Vector3 currentup;
 	private Vector3 currentlook;
 	private Vector3 currentlookoffset;
 	/************************/
-	private Vector3 accFilter;
-	private Vector2 screenMid;
-	private bool draging = false;
-	private float startDragTheta;
-	private bool zooming = false;
+	private Vector3 accFilter = Vector3.zero;
+	/************************/
+	private bool onefinger = false;
+	private float localEulerX;
+	private Transform junction;
+	private Vector2 startOneTouch;
+	private float startLocalEulerX;
+	/***************************/
+	private bool twofingers = false;
 	private float lastZoomval;
-	private float lastZoomOffset;
+	private float lastZTwoTouchDist;
+	private float startGravityDelta;
 
 	void Awake ()
 	{
@@ -31,24 +35,23 @@ public class lld_MainController : MonoBehaviour
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 		currentup = world.forward;
 		currentlook = world.position;
-		currentlookoffset = world.up;
-		/***************************/
-		screenMid = new Vector2 (Screen.width >> 1, Screen.height >> 1);
+		currentlookoffset = cameraMaxLen * world.up;
+		junction = transform.FindChild ("Junction");
 	}
 
 	void FixedUpdate ()
 	{
-		Vector3 desireUp = world.forward * Mathf.Cos (gravityTheta) + world.right * Mathf.Sin (gravityTheta);
+		Vector3 desireUp = world.forward * Mathf.Cos (gravityAlpha) + world.right * Mathf.Sin (gravityAlpha);
 		if (!desireUp.Equals (currentup)) {
 			currentup = Vector3.RotateTowards (currentup, desireUp, 0.07f, 0f);
 		}
-		Vector3 desirelook = world.position + (zoomval / maxzoom) * (player.position - world.position);
+		Vector3 desirelook = world.position + zoomval * (player.position - world.position);
 		if (!desirelook.Equals (currentlook)) {
 			currentlook += Vector3.ClampMagnitude (desirelook - currentlook, 0.5f);
 		}
-		Vector3 desirelookoffset = (1f - zoomval) * cameraMaxLen * world.up;
+		Vector3 desirelookoffset = (1.01f - zoomval) * cameraMaxLen * world.up;
 		if (!desirelookoffset.Equals (currentlookoffset)) {
-			currentlookoffset = Vector3.RotateTowards (currentlookoffset, desirelookoffset, 0.05f, 0.2f);
+			currentlookoffset = Vector3.RotateTowards (currentlookoffset, desirelookoffset, 0.05f, 0.35f);
 		}
 	}
 
@@ -56,33 +59,42 @@ public class lld_MainController : MonoBehaviour
 	{
 		switch (Input.touchCount) {
 		case 1:
-			Vector2 dragPos = Input.GetTouch (0).position;
-			dragPos.Set (dragPos.x - screenMid.x, dragPos.y - screenMid.y);
-			if (draging) {
-				float theta = startDragTheta + Mathf.Atan2 (dragPos.y, dragPos.x);
-				theta = (theta + Mathf.PI + Mathf.PI < 0f) ? (theta + Mathf.PI + Mathf.PI) : theta;
-				theta = (theta - Mathf.PI - Mathf.PI > 0f) ? (theta - Mathf.PI - Mathf.PI) : theta;
-				gravityTheta = theta;
+			Vector2 oneTouch = Input.GetTouch (0).position;
+			if (onefinger) {
+				localEulerX = startLocalEulerX + 0.4f * (startOneTouch.y - oneTouch.y);
+				localEulerX = Mathf.Max (-60f, Mathf.Min (60f, localEulerX));
 			} else {
-				startDragTheta = gravityTheta - Mathf.Atan2 (dragPos.y, dragPos.x);
-				draging = true;
+				onefinger = true;
+				startOneTouch = oneTouch;
+				startLocalEulerX = junction.localEulerAngles.x;
+				startLocalEulerX = (startLocalEulerX < 180f) ? startLocalEulerX : (startLocalEulerX - 360f);
 			}
-			zooming = false;
+			twofingers = false;
 			break;
 		case 2:
-			float zoomOffset = Vector2.Distance (Input.GetTouch (0).position, Input.GetTouch (1).position);
-			if (zooming) {
-				zoomval = Mathf.Max (0f, Mathf.Min (maxzoom, lastZoomval + (zoomOffset - lastZoomOffset) * 0.001f));
+			Vector2 twoTouchs = Input.GetTouch (0).position - Input.GetTouch (1).position;
+			float twoTouchDist = twoTouchs.magnitude;
+			if (twofingers) {
+				float cache = (twoTouchDist - lastZTwoTouchDist) * 0.001f;
+				if (Mathf.Abs (cache) > 0.1f) {
+					zoomval = Mathf.Max (0f, Mathf.Min (1f, lastZoomval + cache));
+				}
+				cache = startGravityDelta + Mathf.Atan2 (twoTouchs.y, twoTouchs.x);
+				cache = (cache + Mathf.PI + Mathf.PI < 0f) ? (cache + Mathf.PI + Mathf.PI) : cache;
+				cache = (cache - Mathf.PI - Mathf.PI > 0f) ? (cache - Mathf.PI - Mathf.PI) : cache;
+				gravityAlpha = cache;
 			} else {
+				twofingers = true;
 				lastZoomval = zoomval;
-				lastZoomOffset = zoomOffset;
-				zooming = true;
+				lastZTwoTouchDist = twoTouchDist;
+				startGravityDelta = gravityAlpha - Mathf.Atan2 (twoTouchs.y, twoTouchs.x);
 			}
-			draging = false;
+			onefinger = false;
 			break;
 		default:
-			draging = false;
-			zooming = false;
+			onefinger = false;
+			twofingers = false;
+			localEulerX *= 0.98f;
 			break;
 		}
 
@@ -101,6 +113,7 @@ public class lld_MainController : MonoBehaviour
 
 		transform.position = currentlook + currentlookoffset - (1f - zoomval) * cameraMaxLen * tiltRatio * realgravity;
 		transform.LookAt (currentlook, currentup);
+		junction.localEulerAngles = new Vector3 ((localEulerX < 0f) ? (localEulerX + 360f) : localEulerX, 0f, 0f);
 		Physics.gravity = realgravity + accFilter;
 	}
 }
