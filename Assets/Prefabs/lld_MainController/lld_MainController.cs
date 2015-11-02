@@ -19,9 +19,11 @@ public class lld_MainController : MonoBehaviour
 	/************************/
 	private bool onefinger = false;
 	private float localEulerX;
+	private float localEulerY;
 	private Transform junction;
 	private Vector2 startOneTouch;
 	private float startLocalEulerX;
+	private float startLocalEulerY;
 	/***************************/
 	private bool twofingers = false;
 	private float lastZoomval;
@@ -61,13 +63,17 @@ public class lld_MainController : MonoBehaviour
 		case 1:
 			Vector2 oneTouch = Input.GetTouch (0).position;
 			if (onefinger) {
-				localEulerX = startLocalEulerX + 0.4f * (startOneTouch.y - oneTouch.y);
+				localEulerX = startLocalEulerX + 0.2f * (startOneTouch.y - oneTouch.y);
+				localEulerY = startLocalEulerY - 0.2f * (startOneTouch.x - oneTouch.x);
 				localEulerX = Mathf.Max (-60f, Mathf.Min (60f, localEulerX));
+				localEulerY = Mathf.Max (-60f, Mathf.Min (60f, localEulerY));
 			} else {
 				onefinger = true;
 				startOneTouch = oneTouch;
 				startLocalEulerX = junction.localEulerAngles.x;
+				startLocalEulerY = junction.localEulerAngles.y;
 				startLocalEulerX = (startLocalEulerX < 180f) ? startLocalEulerX : (startLocalEulerX - 360f);
+				startLocalEulerY = (startLocalEulerY < 180f) ? startLocalEulerY : (startLocalEulerY - 360f);
 			}
 			twofingers = false;
 			break;
@@ -94,7 +100,8 @@ public class lld_MainController : MonoBehaviour
 		default:
 			onefinger = false;
 			twofingers = false;
-			localEulerX *= 0.98f;
+			localEulerX *= 0.96f;
+			localEulerY *= 0.96f;
 			break;
 		}
 
@@ -113,7 +120,9 @@ public class lld_MainController : MonoBehaviour
 
 		transform.position = currentlook + currentlookoffset - (1f - zoomval) * cameraMaxLen * tiltRatio * realgravity;
 		transform.LookAt (currentlook, currentup);
-		junction.localEulerAngles = new Vector3 ((localEulerX < 0f) ? (localEulerX + 360f) : localEulerX, 0f, 0f);
+		junction.localEulerAngles = new Vector3 ((localEulerX < 0f) ? (localEulerX + 360f) : localEulerX,
+		                                         (localEulerY < 0f) ? (localEulerY + 360f) : localEulerY,
+		                                         0f);
 		Physics.gravity = realgravity + accFilter;
 	}
 }
