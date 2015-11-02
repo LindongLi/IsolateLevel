@@ -14,13 +14,12 @@ public class lld_MainController : MonoBehaviour
 	private float gravityTheta = 0f;
 	private Vector3 currentup;
 	private Vector3 currentlook;
-	private Vector3 currentpos;
-	private Vector3 accFilter;
+	private Vector3 currentlookoffset;
 	/************************/
+	private Vector3 accFilter;
 	private Vector2 screenMid;
 	private bool draging = false;
-	private float lastGravityTheta;
-	private Vector2 lastDragOffset;
+	private float startDragTheta;
 	private bool zooming = false;
 	private float lastZoomval;
 	private float lastZoomOffset;
@@ -32,7 +31,7 @@ public class lld_MainController : MonoBehaviour
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 		currentup = world.forward;
 		currentlook = world.position;
-		currentpos = currentlook + (1f - zoomval) * cameraMaxLen * world.up;
+		currentlookoffset = world.up;
 		/***************************/
 		screenMid = new Vector2 (Screen.width >> 1, Screen.height >> 1);
 	}
@@ -47,9 +46,9 @@ public class lld_MainController : MonoBehaviour
 		if (!desirelook.Equals (currentlook)) {
 			currentlook += Vector3.ClampMagnitude (desirelook - currentlook, 0.5f);
 		}
-		Vector3 desirePos = desirelook + (1f - zoomval) * cameraMaxLen * world.up;
-		if (!desirePos.Equals (currentpos)) {
-			currentpos += Vector3.ClampMagnitude (desirePos - currentpos, 0.5f);
+		Vector3 desirelookoffset = (1f - zoomval) * cameraMaxLen * world.up;
+		if (!desirelookoffset.Equals (currentlookoffset)) {
+			currentlookoffset = Vector3.RotateTowards (currentlookoffset, desirelookoffset, 0.05f, 0.2f);
 		}
 	}
 
@@ -57,13 +56,15 @@ public class lld_MainController : MonoBehaviour
 	{
 		switch (Input.touchCount) {
 		case 1:
-			Vector2 dragOffset = Input.GetTouch (0).position;
-			dragOffset.Set (dragOffset.x + screenMid.x, dragOffset.y - screenMid.y);
+			Vector2 dragPos = Input.GetTouch (0).position;
+			dragPos.Set (dragPos.x - screenMid.x, dragPos.y - screenMid.y);
 			if (draging) {
-				gravityTheta = lastGravityTheta + Vector2.Angle (lastDragOffset, dragOffset) / 60f;
+				float theta = startDragTheta + Mathf.Atan2 (dragPos.y, dragPos.x);
+				theta = (theta + Mathf.PI + Mathf.PI < 0f) ? (theta + Mathf.PI + Mathf.PI) : theta;
+				theta = (theta - Mathf.PI - Mathf.PI > 0f) ? (theta - Mathf.PI - Mathf.PI) : theta;
+				gravityTheta = theta;
 			} else {
-				lastGravityTheta = gravityTheta;
-				lastDragOffset = dragOffset;
+				startDragTheta = gravityTheta - Mathf.Atan2 (dragPos.y, dragPos.x);
 				draging = true;
 			}
 			zooming = false;
@@ -98,7 +99,7 @@ public class lld_MainController : MonoBehaviour
 		realacc -= Vector3.ClampMagnitude (realacc, 5f);
 		accFilter = accFilter * 0.6f + (currentright * realacc.x + currentup * realacc.y) * 25f;
 
-		transform.position = currentpos - (1f - zoomval) * cameraMaxLen * tiltRatio * realgravity;
+		transform.position = currentlook + currentlookoffset - (1f - zoomval) * cameraMaxLen * tiltRatio * realgravity;
 		transform.LookAt (currentlook, currentup);
 		Physics.gravity = realgravity + accFilter;
 	}
