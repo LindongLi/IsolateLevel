@@ -27,7 +27,7 @@ public class ShootBolt : MonoBehaviour
 		if (reload) {
 			if (Time.time >= nextFire) {
 				reload.GetComponent<Rigidbody> ().isKinematic = false;
-				reload.GetComponent<Rigidbody> ().velocity = SpawnPos.forward * boltSpeed;
+				reload.GetComponent<Rigidbody> ().velocity = SpawnPos.up * boltSpeed;
 				nextReload = Time.time + reloadTime;
 				reload = null;
 				fireSound.Play ();

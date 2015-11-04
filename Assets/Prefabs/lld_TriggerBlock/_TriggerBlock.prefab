@@ -26,7 +26,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 443030}
   - 33: {fileID: 3388876}
-  - 64: {fileID: 6411882}
   - 23: {fileID: 2388986}
   m_Layer: 0
   m_Name: TriggerBase
@@ -72,8 +71,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 152644}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.60000002, z: 0}
-  m_LocalScale: {x: .109999999, y: 1, z: .109999999}
+  m_LocalPosition: {x: 0, y: -1.70000005, z: 0}
+  m_LocalScale: {x: 1, y: .400000006, z: 1}
   m_Children: []
   m_Father: {fileID: 462016}
   m_RootOrder: 1
@@ -152,19 +151,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 152644}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &6411882
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 152644}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Convex: 0
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!65 &6588180
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -175,7 +162,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000012, y: 4, z: 1.00000012}
+  m_Size: {x: .800000012, y: 4, z: .800000012}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &8229648
 AudioSource:

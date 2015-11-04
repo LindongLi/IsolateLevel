@@ -114,7 +114,7 @@ public class lld_MainController : MonoBehaviour
 		realacc = Input.gyro.userAcceleration * 9.8f;
 #endif
 		Vector3 currentright = Vector3.Cross (world.up, currentup);
-		realgravity = Vector3.ClampMagnitude (currentright * realgravity.x + currentup * realgravity.y, 9.8f);
+		realgravity = Vector3.ClampMagnitude (currentright * realgravity.x + currentup * realgravity.y, 9.8f) - world.up;
 		realacc -= Vector3.ClampMagnitude (realacc, 5f);
 		accFilter = accFilter * 0.6f + (currentright * realacc.x + currentup * realacc.y) * 25f;
 

@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3312362}
   - 23: {fileID: 2383394}
   m_Layer: 0
-  m_Name: Arrow
+  m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,9 +112,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 30fc4288a0dcb47f99712fa1ff5fb157, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 5a11efda505624610b933301dac70df6, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: .200000003
+  m_Volume: .400000006
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -207,7 +207,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 30fc4288a0dcb47f99712fa1ff5fb157, type: 3}
+      objectReference: {fileID: 8300000, guid: 5a11efda505624610b933301dac70df6, type: 3}
     - target: {fileID: 0}
       propertyPath: m_PlayOnAwake
       value: 0
@@ -218,7 +218,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Volume
-      value: .200000003
+      value: .400000006
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Materials.Array.data[0]
