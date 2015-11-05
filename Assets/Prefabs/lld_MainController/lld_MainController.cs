@@ -82,9 +82,8 @@ public class lld_MainController : MonoBehaviour
 			float twoTouchDist = twoTouchs.magnitude;
 			if (twofingers) {
 				float cache = (twoTouchDist - lastZTwoTouchDist) * 0.001f;
-				if (Mathf.Abs (cache) > 0.1f) {
-					zoomval = Mathf.Max (0f, Mathf.Min (1f, lastZoomval + cache));
-				}
+				cache = (cache > 0f) ? Mathf.Max (0f, cache - 0.2f) : Mathf.Min (0f, cache + 0.2f);
+				zoomval = Mathf.Max (0f, Mathf.Min (1f, lastZoomval + cache));
 				cache = startGravityDelta + Mathf.Atan2 (twoTouchs.y, twoTouchs.x);
 				cache = (cache + Mathf.PI + Mathf.PI < 0f) ? (cache + Mathf.PI + Mathf.PI) : cache;
 				cache = (cache - Mathf.PI - Mathf.PI > 0f) ? (cache - Mathf.PI - Mathf.PI) : cache;
@@ -118,7 +117,7 @@ public class lld_MainController : MonoBehaviour
 		realacc -= Vector3.ClampMagnitude (realacc, 5f);
 		accFilter = accFilter * 0.6f + (currentright * realacc.x + currentup * realacc.y) * 25f;
 
-		transform.position = currentlook + currentlookoffset - (1f - zoomval) * cameraMaxLen * tiltRatio * realgravity;
+		transform.position = currentlook + currentlookoffset - (1.01f - zoomval) * cameraMaxLen * tiltRatio * realgravity;
 		transform.LookAt (currentlook, currentup);
 		junction.localEulerAngles = new Vector3 ((localEulerX < 0f) ? (localEulerX + 360f) : localEulerX,
 		                                         (localEulerY < 0f) ? (localEulerY + 360f) : localEulerY,
