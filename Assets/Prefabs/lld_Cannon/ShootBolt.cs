@@ -5,10 +5,10 @@ using System.Collections.Generic;
 public class ShootBolt : MonoBehaviour
 {
 	public Transform SpawnPos;
-	public float boltSpeed = 50.0f;
-	public float reloadTime = 1.0f;
-	public float minfirePrepare = 2.0f;
-	public float maxfirePrepare = 4.0f;
+	public float boltSpeed = 50f;
+	public float reloadTime = 1f;
+	public float minfirePrepare = 2f;
+	public float maxfirePrepare = 4f;
 	public List<GameObject> bolts;
 	/*********************/
 	private GameObject reload = null;
@@ -16,10 +16,12 @@ public class ShootBolt : MonoBehaviour
 	private float nextReload;
 	private float nextFire;
 	private AudioSource fireSound;
+	private ParticleSystem explosion;
 
 	void Awake ()
 	{
 		fireSound = GetComponent<AudioSource> ();
+		explosion = GetComponentInChildren<ParticleSystem> ();
 	}
 
 	void Update ()
@@ -31,6 +33,7 @@ public class ShootBolt : MonoBehaviour
 				nextReload = Time.time + reloadTime;
 				reload = null;
 				fireSound.Play ();
+				explosion.Play ();
 			}
 		} else if (auto) {
 			if (Time.time >= nextReload) {

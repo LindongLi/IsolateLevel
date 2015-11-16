@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3336770}
   - 23: {fileID: 2361958}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ GameObject:
   - 23: {fileID: 2316212}
   - 114: {fileID: 11488580}
   m_Layer: 0
-  m_Name: right_wheels
+  m_Name: right_wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +47,7 @@ GameObject:
   - 33: {fileID: 3333092}
   - 23: {fileID: 2384602}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ GameObject:
   - 23: {fileID: 2381384}
   - 114: {fileID: 11415430}
   m_Layer: 0
-  m_Name: left_wheels
+  m_Name: left_wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,7 +102,7 @@ GameObject:
   - 23: {fileID: 2343900}
   - 114: {fileID: 11415286}
   m_Layer: 0
-  m_Name: Belts
+  m_Name: Belt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -142,7 +142,7 @@ Transform:
   m_GameObject: {fileID: 185698}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 11, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 444620}
   - {fileID: 416498}
@@ -433,7 +433,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0cf66a68067c47fbbd43dc61c258300, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  father: {fileID: 185698}
+  speed: 0
+  friction: 0
 --- !u!114 &11415430
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -445,8 +446,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82ae2b976b6b14b37967e7512f0905a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  father: {fileID: 185698}
-  child: {fileID: 111062}
+  speed: 0
+  friction: 0
 --- !u!114 &11445446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -471,8 +472,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82ae2b976b6b14b37967e7512f0905a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  father: {fileID: 185698}
-  child: {fileID: 128680}
+  speed: 0
+  friction: 0
 --- !u!136 &13603406
 CapsuleCollider:
   m_ObjectHideFlags: 1

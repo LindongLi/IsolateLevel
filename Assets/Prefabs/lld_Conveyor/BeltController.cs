@@ -3,26 +3,19 @@ using System.Collections;
 
 public class BeltController : MonoBehaviour
 {
-	public GameObject father;
+	public float speed;
+	public float friction;
 	/***********************/
-	private float friction;
-	private float speed;
 	private AudioSource frictionSound;
 
 	void Start ()
 	{
-		float distance = father.transform.localScale.x;
-		float radian = Mathf.Min (distance, father.transform.localScale.z);
+		Transform father = transform.parent;
+		float distance = father.localScale.x;
+		float radian = Mathf.Min (distance, father.localScale.z);
 		transform.localScale = new Vector3 (2f - radian / distance, transform.localScale.y, 1f);
-		OnUpdateVariable ();
-		frictionSound = father.GetComponent<AudioSource> ();
+		frictionSound = father.gameObject.GetComponent<AudioSource> ();
 		frictionSound.Pause ();
-	}
-	
-	void OnUpdateVariable ()
-	{
-		friction = father.GetComponent<ConveyorSpeed> ().friction;
-		speed = father.GetComponent<ConveyorSpeed> ().speed;
 	}
 
 	private void HandleCollision (Collision other)

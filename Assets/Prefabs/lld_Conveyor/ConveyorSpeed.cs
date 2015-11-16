@@ -7,10 +7,24 @@ public class ConveyorSpeed : MonoBehaviour
 	public float friction = 0.8f;
 	/***************************/
 	private float oldspeed = 0f;
+	private float currspeed = 0f;
+	private BeltController belt;
+	private WheelController leftwheel;
+	private WheelController rightwheel;
+	/*******************************/
 
-	private void BroadCast ()
+	void Start ()
 	{
-		BroadcastMessage ("OnUpdateVariable");
+		Transform cache;
+		belt = transform.FindChild ("Belt").GetComponent<BeltController> ();
+		leftwheel = transform.FindChild ("left_wheel").GetComponent<WheelController> ();
+		rightwheel = transform.FindChild ("right_wheel").GetComponent<WheelController> ();
+		belt.speed = currspeed;
+		belt.friction = friction;
+		leftwheel.speed = currspeed;
+		leftwheel.friction = friction;
+		rightwheel.speed = currspeed;
+		rightwheel.friction = friction;
 	}
 
 	void OnPause ()
@@ -18,7 +32,6 @@ public class ConveyorSpeed : MonoBehaviour
 		if (speed != 0f) {
 			oldspeed = speed;
 			speed = 0f;
-			BroadCast ();
 		}
 	}
 
@@ -26,7 +39,6 @@ public class ConveyorSpeed : MonoBehaviour
 	{
 		if (speed != oldspeed) {
 			speed = oldspeed;
-			BroadCast ();
 		}
 	}
 
@@ -34,7 +46,16 @@ public class ConveyorSpeed : MonoBehaviour
 	{
 		if (speed != 0f) {
 			speed = -speed;
-			BroadCast ();
+		}
+	}
+
+	void Update ()
+	{
+		if (currspeed != speed) {
+			currspeed += Mathf.Max (-0.1f, Mathf.Min (0.1f, speed - currspeed));
+			belt.speed = currspeed;
+			leftwheel.speed = currspeed;
+			rightwheel.speed = currspeed;
 		}
 	}
 }

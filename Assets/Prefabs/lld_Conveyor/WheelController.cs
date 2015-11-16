@@ -3,35 +3,27 @@ using System.Collections;
 
 public class WheelController : MonoBehaviour
 {
-	public GameObject father;
-	public GameObject child;
+	public float speed;
+	public float friction;
 	/**********************/
-	private float friction;
-	private float speed;
 	private float radian;
-	private float rotate;
+	private Transform rotateIcon;
 	private AudioSource frictionSound;
 
 	void Start ()
 	{
-		float distance = father.transform.localScale.x;
-		radian = Mathf.Min (distance, father.transform.localScale.z);
+		Transform father = transform.parent;
+		float distance = father.localScale.x;
+		radian = Mathf.Min (distance, father.localScale.z);
 		transform.Translate (transform.right * (distance - radian) * 0.5f, Space.World);
 		transform.localScale = new Vector3 (radian / distance, transform.localScale.y, 1f);
-		OnUpdateVariable ();
-		frictionSound = father.GetComponent<AudioSource> ();
-	}
-
-	void OnUpdateVariable ()
-	{
-		friction = father.GetComponent<ConveyorSpeed> ().friction;
-		speed = father.GetComponent<ConveyorSpeed> ().speed;
-		rotate = speed * 60f / (Mathf.PI * radian);
+		frictionSound = father.gameObject.GetComponent<AudioSource> ();
+		rotateIcon = transform.FindChild ("Icon");
 	}
 
 	void Update ()
 	{
-		child.transform.Rotate (0f, rotate * Time.deltaTime, 0f);
+		rotateIcon.Rotate (0f, Time.deltaTime * speed * 60f / (Mathf.PI * radian), 0f);
 	}
 
 	private void HandleCollision (Collision other)

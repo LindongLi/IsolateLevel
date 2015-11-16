@@ -26,11 +26,11 @@ public class TriggerController : MonoBehaviour
 
 	void OnTriggerEnter (Collider other)
 	{
-		triggerButton.position -= transform.up * 1.2f;
 		if (isinvalid || !other.CompareTag ("Player")) {
 			return;
 		}
 		triggerSound.Play ();
+		triggerButton.position -= transform.up * 1.2f;
 		for (int i = 0; i < enterEvents.Count; ++i) {
 			if (enterEvents [i] != "") {
 				tasks [i].SendMessage (enterEvents [i], SendMessageOptions.DontRequireReceiver);
@@ -40,10 +40,10 @@ public class TriggerController : MonoBehaviour
 
 	void OnTriggerExit (Collider other)
 	{
-		triggerButton.position += transform.up * 1.2f;
 		if (isinvalid || !other.CompareTag ("Player")) {
 			return;
 		}
+		triggerButton.position += transform.up * 1.2f;
 		for (int i = 0; i < exitEvents.Count; ++i) {
 			if (exitEvents [i] != "") {
 				tasks [i].SendMessage (exitEvents [i], SendMessageOptions.DontRequireReceiver);
