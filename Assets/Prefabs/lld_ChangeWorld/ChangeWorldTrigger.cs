@@ -23,14 +23,16 @@ public class ChangeWorldTrigger : MonoBehaviour
 
 	void OnCollisionExit (Collision other)
 	{
-		if (!other.gameObject.CompareTag ("Player") || mainScript.world == newWorld) {
-			return;
-		}
-		victorySound.Play ();
-		mainScript.world = newWorld;
-		for (int i = 0; i < triggerEvents.Count; ++i) {
-			if (triggerEvents [i] != "") {
-				tasks [i].SendMessage (triggerEvents [i], SendMessageOptions.DontRequireReceiver);
+		if ((mainScript.world != newWorld) && other.gameObject.CompareTag ("Player")) {
+			if (Vector3.Dot (other.transform.position - transform.position, transform.up) < 0f) {
+				return;
+			}
+			victorySound.Play ();
+			mainScript.world = newWorld;
+			for (int i = 0; i < triggerEvents.Count; ++i) {
+				if (triggerEvents [i] != "") {
+					tasks [i].SendMessage (triggerEvents [i], SendMessageOptions.DontRequireReceiver);
+				}
 			}
 		}
 	}

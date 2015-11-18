@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class ShootBolt : MonoBehaviour
 {
+	public bool auto = false;
 	public Transform SpawnPos;
 	public float boltSpeed = 50f;
 	public float reloadTime = 1f;
@@ -12,7 +13,6 @@ public class ShootBolt : MonoBehaviour
 	public List<GameObject> bolts;
 	/*********************/
 	private GameObject reload = null;
-	private bool auto = false;
 	private float nextReload;
 	private float nextFire;
 	private AudioSource fireSound;

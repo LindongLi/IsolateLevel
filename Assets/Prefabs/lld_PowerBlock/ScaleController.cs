@@ -48,6 +48,16 @@ public class ScaleController : MonoBehaviour
 		}
 	}
 
+	void OnPause ()
+	{
+		auto = false;
+	}
+
+	void OnRestart ()
+	{
+		auto = true;
+	}
+
 	void OnReverse ()
 	{
 		Scale = (Scale == minScale) ? maxScale : minScale;

@@ -6,6 +6,7 @@ public class BeltController : MonoBehaviour
 	public float speed;
 	public float friction;
 	/***********************/
+	private Renderer[] beltRenders;
 	private AudioSource frictionSound;
 
 	void Start ()
@@ -16,6 +17,14 @@ public class BeltController : MonoBehaviour
 		transform.localScale = new Vector3 (2f - radian / distance, transform.localScale.y, 1f);
 		frictionSound = father.gameObject.GetComponent<AudioSource> ();
 		frictionSound.Pause ();
+		beltRenders = GetComponentsInChildren<Renderer> ();
+	}
+
+	void Update ()
+	{
+		foreach (Renderer brender in beltRenders) {
+			brender.material.mainTextureOffset += new Vector2 (0f, Time.deltaTime * speed * 0.06f);
+		}
 	}
 
 	private void HandleCollision (Collision other)

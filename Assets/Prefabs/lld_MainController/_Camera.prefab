@@ -281,8 +281,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   world: {fileID: 0}
   player: {fileID: 0}
-  tiltRatio: .0399999991
-  cameraMaxLen: 30
+  tiltRatio: .0599999987
+  cameraMaxLen: 28
 --- !u!124 &12423188
 Behaviour:
   m_ObjectHideFlags: 1

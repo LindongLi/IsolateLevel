@@ -106,7 +106,7 @@ public class lld_MainController : MonoBehaviour
 
 		Vector3 realgravity, realacc;
 #if UNITY_EDITOR
-		realgravity = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0f) * 9.8f;
+		realgravity = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0f) * 19.6f;
 		realacc = Vector3.zero;
 #else
 		realgravity = Input.gyro.gravity * 19.6f;
@@ -115,13 +115,13 @@ public class lld_MainController : MonoBehaviour
 		Vector3 currentright = Vector3.Cross (world.up, currentup);
 		realgravity = Vector3.ClampMagnitude (currentright * realgravity.x + currentup * realgravity.y, 9.8f) - world.up;
 		realacc -= Vector3.ClampMagnitude (realacc, 5f);
-		accFilter = accFilter * 0.6f + (currentright * realacc.x + currentup * realacc.y) * 25f;
+		accFilter = accFilter * 0.5f + (currentright * realacc.x + currentup * realacc.y) * 25f;
 
 		transform.position = currentlook + currentlookoffset - (1.01f - zoomval) * cameraMaxLen * tiltRatio * realgravity;
 		transform.LookAt (currentlook, currentup);
 		junction.localEulerAngles = new Vector3 ((localEulerX < 0f) ? (localEulerX + 360f) : localEulerX,
 		                                         (localEulerY < 0f) ? (localEulerY + 360f) : localEulerY,
 		                                         0f);
-		Physics.gravity = realgravity + accFilter;
+		Physics.gravity = realgravity * 1.5f + accFilter;
 	}
 }
